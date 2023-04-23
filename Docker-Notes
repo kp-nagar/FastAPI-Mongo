@@ -1,0 +1,26 @@
+- To run the docker-compose file with 
+$ docker-compose up 
+or
+$ docker-compose up -d 
+to run containers in the background
+
+- You can connect your program to the database by using this URL as a connection
+mongodb://YourUsername:YourPasswordHere@127.0.0.1:27017/your-database-name
+
+- Login to MongoDB with created User & Database by using
+$ mongo -u <your username> -p <your password> --authenticationDatabase <your database name>
+### OR ###
+$ mongo -u <your username> --authenticationDatabase <your database name>
+
+- Login to your container by using container names
+$ docker exec -it <container-name> bash
+
+- To check our data container, check with command below.
+$ docker volume ls
+
+
+- Mongosh - For executing the mongo command
+
+- Connect to the database
+mongodb://root:toor@localhost:27017
+

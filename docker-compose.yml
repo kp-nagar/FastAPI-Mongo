@@ -1,0 +1,32 @@
+version: '3'                            # version is a version of docker-compose file format
+services:               
+    mongo:                              # mongo is just a service name, you can change the name whatever you want
+        image: mongo                    # image must be mongo, because you want to create a container from mongo image
+        container_name: mongo-service   # container_name is a name for your container, it’s optional
+        # Always restart the container if it stops. If it is manually stopped,
+        # it is restarted only when Docker daemon restarts or the container itself is manually restarted. 
+        restart: always
+        # ports is to define which ports you want to expose and define, in this case I use default mongoDB port 27017 until 27019                 
+        ports:
+            - '27017:27017'
+            # - '27017-27019:27017-27019'     # You can use range also.
+        environment:                        # environment is a variables that will be used on the mongo container
+            # - MONGO_INITDB_DATABASE=test  # MONGO_INITDB_DATABASE you fill with a database name that you want to create, make it same like init-mongo.js
+            # username/password of root that you want.
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=toor
+        volumes:    # volumes to define a file/folder that you want to use for the container
+            # ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo-js:ro means you want 
+            # to copy init-mongo.js to /docker-entrypoint-initdb.d/ as a read only file.
+            # /docker-entrypoint-initdb.d is a folder that already created inside the mongo 
+            # container used for initiating database, so we copy our script to that folder
+            - /var/mongo/mongo-entrypoint:/docker-entrypoint-initdb.d
+            # ./mongo-volume:/data/db means you want to set data on container persist on 
+            # your local folder named mongo-volume . /data/db/ is a folder that already created inside the mongo container.
+            - /var/mongo/mongodb:/data/db
+            - /var/mongo/mongoconfig:/data/configdb
+
+volumes:
+  # default dir on Ubuntu: /var/lib/docker/volumes
+  mongodb:
+  mongoconfig:
