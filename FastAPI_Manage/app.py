@@ -5,12 +5,14 @@ from config.config import settings
 from contextlib import asynccontextmanager
 
 
+mongo_setup = dict()
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    mongodb_client = MongoClient(settings.MONGO_URL)
-    mongodb_database = mongodb_client[settings.MONGO_DB]
+    app.mongodb_client = MongoClient(settings.MONGO_URL)
+    app.mongodb_database = app.mongodb_client[settings.MONGO_DB]
     yield
-    mongodb_client.close()
+    app.mongodb_client.close()
 
 
 app = FastAPI(lifespan=lifespan)
@@ -19,3 +21,9 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/")
 async def root():
     return "Demo of MongoDB with FastAPI"
+
+
+@app.get("/init")
+async def init_databse():
+    collection = app.mongodb_database.UserInformation
+    return "User information collection created successfully"
