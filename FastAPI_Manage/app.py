@@ -2,14 +2,20 @@ from fastapi import FastAPI
 from pymongo import MongoClient
 import pymongo
 from config.config import settings
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    mongodb_client = MongoClient(settings.MONGO_URL)
+    mongodb_database = mongodb_client[settings.MONGO_DB]
+    yield
+    mongodb_client.close()
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")
 async def root():
-    client = MongoClient(settings.MONGO_DB)
-    db = client.kpnagar     # Getting a Database
-    collection = db.test    # Getting a Collection
-    print(collection)
     return "Demo of MongoDB with FastAPI"
