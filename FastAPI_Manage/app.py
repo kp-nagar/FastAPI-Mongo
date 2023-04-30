@@ -26,4 +26,10 @@ async def root():
 @app.get("/init")
 async def init_databse():
     collection = app.mongodb_database.UserInformation
-    return "User information collection created successfully"
+    admin_user = {
+        'username': settings.ADMIN_NAME,
+        'email': settings.ADMIN_EMAIL,
+        'password': settings.ADMIN_PASSWD
+    }
+    collection.insert_one(admin_user)
+    return "Collection setup successfully."
