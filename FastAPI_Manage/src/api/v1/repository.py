@@ -9,5 +9,5 @@ def insert_user(session, db, username, email, password, lastname=None):
 
     # Add new user data to 'UserInformation' collection
     user_collection.insert_one(user_data, session=session)
-    print("Transaction successful")
+    print("Add user successful")
     return True
